@@ -1,4 +1,4 @@
-import { Suspense } from 'react' // <--- 1. Импортируем Suspense
+import { Suspense } from 'react' // <--- 1. ВАЖНО: Добавляем импорт
 import AuthForm from '@/components/AuthForm'
 import HeroSlider from '@/components/HeroSlider'
 
@@ -26,10 +26,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ВАЖНО: Оборачиваем AuthForm в Suspense.
-            Это решает ошибку билда "missing-suspense-with-csr-bailout".
-        */}
-        <Suspense fallback={<div className="text-white">Загрузка формы...</div>}>
+        {/* 2. ВАЖНО: Оборачиваем форму в Suspense */}
+        <Suspense fallback={<div className="text-white">Загрузка...</div>}>
            <AuthForm />
         </Suspense>
 
