@@ -1,45 +1,40 @@
+import { Suspense } from 'react' // <--- 1. Импортируем Suspense
 import AuthForm from '@/components/AuthForm'
-import HeroSlider from '@/components/HeroSlider' // Импорт слайдера
+import HeroSlider from '@/components/HeroSlider'
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white">
-      {/* 1. Слайдер во всю ширину */}
+    <main className="min-h-screen bg-white dark:bg-black">
+      
+      {/* Слайдер */}
       <HeroSlider />
 
-      {/* 2. Секция с формой входа */}
-      <div className="max-w-7xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-12 items-center">
+      {/* Секция входа */}
+      <section className="container mx-auto px-4 py-12 flex flex-col md:flex-row items-center justify-center gap-10">
         
-        {/* Левая колонка: Текст */}
-        <div>
-          <h1 className="text-4xl font-extrabold text-slate-900 mb-6">
-            Добро пожаловать в <span className="text-blue-600">ProWeb</span>
-          </h1>
-          <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-            Это демонстрационная версия профессиональной платформы. 
-            Здесь реализованы все современные функции: от авторизации 
-            до real-time чатов и админ-панели.
+        <div className="max-w-md text-center md:text-left">
+          <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+            Добро пожаловать в <span className="text-blue-600">rave.gramm</span>
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 text-lg mb-6">
+            Это демонстрационная версия профессиональной платформы. Здесь реализованы все современные функции: от авторизации до real-time чатов и админ-панели.
           </p>
-          
-          <div className="flex gap-4 text-sm font-semibold text-slate-500">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-green-500 rounded-full"></span> Next.js 14
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-blue-500 rounded-full"></span> Supabase
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-purple-500 rounded-full"></span> Tailwind
-            </div>
+          <div className="flex gap-4 justify-center md:justify-start text-sm font-semibold text-gray-500">
+             <span>● Next.js 14</span>
+             <span>● Supabase</span>
+             <span>● Tailwind</span>
           </div>
         </div>
 
-        {/* Правая колонка: Форма */}
-        <div className="flex justify-center">
-          <AuthForm />
-        </div>
+        {/* ВАЖНО: Оборачиваем AuthForm в Suspense.
+            Это решает ошибку билда "missing-suspense-with-csr-bailout".
+        */}
+        <Suspense fallback={<div className="text-white">Загрузка формы...</div>}>
+           <AuthForm />
+        </Suspense>
 
-      </div>
+      </section>
+
     </main>
   )
 }
