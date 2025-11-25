@@ -5,24 +5,24 @@ import type { NextRequest } from 'next/server'
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   
-  // Создаем Supabase клиент для middleware
-  const supabase = createMiddlewareClient({ req, res })
+  try {
+    // Явно передаем URL и KEY из переменных окружения
+    const supabase = createMiddlewareClient({ req, res }, {
+      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+      supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    })
 
-  // Эта строчка обновляет сессию (куки), если она истекает
-  await supabase.auth.getSession()
+    await supabase.auth.getSession()
+  } catch (e) {
+    // Если ошибка — просто игнорируем в middleware, чтобы сайт не падал 500
+    console.error("Middleware error:", e)
+  }
 
   return res
 }
 
-// Указываем, на каких путях должен работать middleware
 export const config = {
   matcher: [
-    /*
-     * Применяем ко всем путям, кроме:
-     * - _next/static (статические файлы)
-     * - _next/image (оптимизация картинок)
-     * - favicon.ico (иконка)
-     */
     '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 }
